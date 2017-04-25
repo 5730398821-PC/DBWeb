@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<title>Chula Database</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/stylesheets/w3style.css">
+<link rel="stylesheet" href="/stylesheets/chart.css">
+<style>
+body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+body {font-size:16px;}
+.w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
+.w3-half img:hover{opacity:1}
+</style>
+
+<body onload="createTable()">
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-pink w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft" style="width:100%;font-size:22px">Close Menu</a>
+  <div class="w3-container">
+    <h3 class="w3-text-white">
+      <b class="w3-jumbo">Chula<br></b>
+      <b class="w3-xxxlarge">DATABASE<br><hr></b>
+    </h3>
+  </div>
+  <div class="w3-bar-block w3-text-white">
+    <a href="/profile" class="w3-bar-item w3-button w3-hover-white">Profile</a>
+    <a href="/executive" class="w3-bar-item w3-button w3-hover-white">Executive</a>
+    <a href="/advisor" class="w3-bar-item w3-button w3-hover-white">Advisor</a>
+    <a href="/about" class="w3-bar-item w3-button w3-hover-white">About us</a>
+  </div>
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-hide-large w3-red w3-xlarge w3-padding">
+  <a href="javascript:void(0)" class="w3-button w3-red w3-margin-right" onclick="w3_open()">â˜°</a>
+  <span>Chula DATABASE</span>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:340px;margin-right:40px">
+
+  <!-- Header -->
+  <div class="w3-container" style="margin-top:80px" id="showcase">
+    <h1 class="w3-jumbo"><b>Query</b></h1>
+    <h1 class="w3-xxxlarge w3-text-pink"><b>for Advisor</b></h1>
+    <hr style="width:1000px;border:5px solid pink" class="w3-round">
+  </div>
+
+
+  <div class="w3-container">
+    <h1 style="margin-top:20px;margin-bottom:35px">My Students</h1>
+    <p style="font-size:18px;margin-bottom:30px">Year
+      <select id="yearSelect" class="w3-select" style="width:10%;font-size:12px;margin-bottom:15px;margin-left:10px">
+        <option value="0">All</option>
+        <option value="1">1st</option>
+        <option value="2">2nd</option>
+        <option value="3">3rd</option>
+        <option value="4">4th</option>
+        <option value="5">Other</option>
+      </select>
+    <button type="button" class="mybutton w3-right" style="margin-left:200px" onclick="filterTable()">Filter</button>
+  </p>
+  </div>
+
+  <!-- Student Table -->
+  <div class="w3-container" style="height:450px;overflow:auto;margin-bottom:100px">
+    <table class="w3-table-all" style="width:100%" id="student_table">
+      <tr>
+      <th>StudentID</th>
+      <th>Name</th>
+      <th>Year</th>
+      <th>GPA</th>
+      <th>Cumulative Weight</th>
+    </tr>
+  </table>
+</div>
+
+
+<div class="container" style="margin-bottom:100px">
+  <h2>GPA of &nbsp นายพิชญุตม์ จิตรศิลป์ฉายากุล</h2>
+  <div>
+    <canvas id="overallChart"></canvas>
+  </div>
+</div>
+
+
+
+<script src="/javascripts/chartjs.js"></script>
+<script src="/javascripts/advisorChart.js"></script>
+<script src="/javascripts/jquery.js"></script>
+<script>
+
+function filterTable(){
+  var table = document.getElementById('student_table')
+  var yearSelect = document.getElementById('yearSelect')
+  while(table.rows[1]) table.deleteRow(1);
+
+  createTable();
+}
+
+function createTable() {
+  var table = document.getElementById('student_table')
+
+    for (var i = 0; i < 10; i++){
+      var tr = document.createElement('tr');
+      tr.setAttribute("style", "cursor:pointer");
+        tr.onclick = function(){
+          window.location.href = '/advisor/student'
+        }
+
+
+      var id = document.createElement('td');
+      var name = document.createElement('td');
+      var year = document.createElement('td');
+      var gpa = document.createElement('td');
+      var cmweight = document.createElement('td');
+
+      var text_id = document.createTextNode('5730398821');
+      var text_name = document.createTextNode('นายพิชญุตม์ จิตรศิลป์ฉายากุล');
+      var text_year = document.createTextNode(yearSelect.options[yearSelect.selectedIndex].value);
+      var text_gpa = document.createTextNode('3.23');
+      var text_cmweight = document.createTextNode('140');
+
+      id.appendChild(text_id);
+      name.appendChild(text_name);
+      year.appendChild(text_year);
+      gpa.appendChild(text_gpa);
+      cmweight.appendChild(text_cmweight);
+      tr.appendChild(id);
+      tr.appendChild(name);
+      tr.appendChild(year);
+      tr.appendChild(gpa);
+      tr.appendChild(cmweight);
+
+      table.appendChild(tr);
+    }
+
+}
+</script>
+
+</body>
+</html>

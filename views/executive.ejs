@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<title>Chula Database</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/stylesheets/w3style.css">
+<link rel="stylesheet" href="/stylesheets/chart.css">
+<style>
+body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+body {font-size:16px;}
+.w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
+.w3-half img:hover{opacity:1}
+</style>
+
+<body onload="createTable()">
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-pink w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft" style="width:100%;font-size:22px">Close Menu</a>
+  <div class="w3-container">
+    <h3 class="w3-text-white">
+      <b class="w3-jumbo">Chula<br></b>
+      <b class="w3-xxxlarge">DATABASE<br><hr></b>
+    </h3>
+  </div>
+  <div class="w3-bar-block w3-text-white">
+    <a href="/profile" class="w3-bar-item w3-button w3-hover-white">Profile</a>
+    <a href="/executive" class="w3-bar-item w3-button w3-hover-white">Executive</a>
+    <a href="/advisor" class="w3-bar-item w3-button w3-hover-white">Advisor</a>
+    <a href="/about" class="w3-bar-item w3-button w3-hover-white">About us</a>
+  </div>
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-hide-large w3-red w3-xlarge w3-padding">
+  <a href="javascript:void(0)" class="w3-button w3-red w3-margin-right" onclick="w3_open()">â˜°</a>
+  <span>Chula DATABASE</span>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:340px;margin-right:40px">
+
+  <!-- Header -->
+  <div class="w3-container" style="margin-top:80px" id="showcase">
+    <h1 class="w3-jumbo"><b>Query</b></h1>
+    <h1 class="w3-xxxlarge w3-text-pink"><b>for Executive</b></h1>
+    <hr style="width:1000px;border:5px solid pink" class="w3-round">
+  </div>
+
+
+
+  <!-- Student Table -->
+  <div class="w3-container" style="overflow:auto;margin-bottom:100px">
+    <h1 style="margin-top:20px;margin-bottom:35px">Overall Look</h1>
+    <table class="w3-table-all" style="width:100%" id="student_table">
+      <tr>
+      <th>Year</th>
+      <th>Numbers of Students</th>
+      <th>Average GPA</th>
+    </tr>
+  </table>
+</div>
+
+
+<div class="container" style="margin-bottom:100px">
+  <h2>Students GPA</h2>
+  <div>
+    <canvas id="gradeChart"></canvas>
+  </div>
+</div>
+
+
+<div class="w3-row-padding" style="margin-bottom:100px">
+  <div class="w3-half">
+    <h2>Student with GPA < 2.20</h2>
+    <div>
+      <canvas id="pieChart1"></canvas>
+    </div>
+  </div>
+
+  <div class="w3-half">
+    <h2>Students with GPA > 3.20</h2>
+    <div>
+      <canvas id="pieChart2"></canvas>
+    </div>
+  </div>
+</div>
+
+
+
+<script src="/javascripts/chartjs.js"></script>
+<script src="/javascripts/executiveChart.js"></script>
+<script src="/javascripts/jquery.js"></script>
+<script>
+
+function filterTable(){
+  var table = document.getElementById('student_table')
+  var yearSelect = document.getElementById('yearSelect')
+  while(table.rows[1]) table.deleteRow(1);
+
+  createTable();
+}
+
+
+function createTable() {
+  var table = document.getElementById('student_table')
+
+    for (var i = 1; i <= 5; i++){
+      var tr = document.createElement('tr');
+
+      var year = document.createElement('td');
+      var num = document.createElement('td');
+      var gpa = document.createElement('td');
+
+      if (i == 5) {
+        var text_year = document.createTextNode('others');
+      }else {
+        var text_year = document.createTextNode(i);
+      }
+      var text_num = document.createTextNode('784');
+      var text_gpa = document.createTextNode('2.57');
+
+      year.appendChild(text_year);
+      num.appendChild(text_num);
+      gpa.appendChild(text_gpa);
+
+      tr.appendChild(year);
+      tr.appendChild(num);
+      tr.appendChild(gpa);
+
+      table.appendChild(tr);
+    }
+
+}
+</script>
+
+</body>
+</html>
