@@ -12,7 +12,7 @@ body {font-size:16px;}
 .w3-half img:hover{opacity:1}
 </style>
 
-<body onload="createTable()">
+<body onload="createGradeChart()">
 
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-pink w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
@@ -27,7 +27,7 @@ body {font-size:16px;}
     <a href="/profile" class="w3-bar-item w3-button w3-hover-white">Profile</a>
     <a href="/executive" class="w3-bar-item w3-button w3-hover-white">Executive</a>
     <a href="/advisor" class="w3-bar-item w3-button w3-hover-white">Advisor</a>
-    <a href="/about" class="w3-bar-item w3-button w3-hover-white">About us</a>
+    <a href="#" class="w3-bar-item w3-button w3-hover-white">About us</a>
   </div>
 </nav>
 
@@ -53,7 +53,7 @@ body {font-size:16px;}
 
 
   <!-- Student Table -->
-  <div class="w3-container" style="overflow:auto;margin-bottom:100px">
+  <div class="w3-container" style="overflow:auto;margin-bottom:50px">
     <h1 style="margin-top:20px;margin-bottom:35px">Overall Look</h1>
     <table class="w3-table-all" style="width:100%" id="student_table">
       <tr>
@@ -61,7 +61,58 @@ body {font-size:16px;}
       <th>Numbers of Students</th>
       <th>Average GPA</th>
     </tr>
+    <% for(var i=0; i < data.table1.length; i++) { %>
+      <tr class="mytr">
+        <td><%= data.table1[i].year %></td>
+        <td><%= data.table1[i].numStudent %></td>
+        <td><%= data.table1[i].avgGPAX.toFixed(2) %></td>
+      </tr>
+    <% } %>
   </table>
+</div>
+
+<div class="w3-row-padding">
+  <div class="w3-half">
+    <!-- Student Table -->
+
+    <div class="w3-container">
+      <table class="w3-table-all" style="width:100%;margin-bottom:80px;" id="exchangeTable">
+        <caption style="font-size:35px;margin-bottom:10px"><b>Exchange</b></caption>
+        <tr>
+          <th>Year</th>
+          <th>Numbers of Students</th>
+        </tr>
+      <% for(var i=0; i < data.table2.length; i++) { %>
+        <tr class="mytr">
+          <td><%= data.table2[i].year %></td>
+          <td><%= data.table2[i].numStudent %></td>
+        </tr>
+      <% } %>
+    </table>
+    </div>
+
+  </div>
+
+  <div class="w3-half">
+    <!-- Student Table -->
+    <div class="w3-container">
+      <table class="w3-table-all" style="width:100%;margin-bottom:80px" id="awardTable">
+        <caption style="font-size:35px;margin-bottom:10px"><b>Awards</b></caption>
+        <tr>
+          <th>Award</th>
+          <th>Event</th>
+          <th>Organization</th>
+        </tr>
+        <% for(var i=0; i < data.table1.length; i++) { %>
+          <tr class="mytr">
+            <td><%= data.table3[i].award_name %></td>
+            <td><%= data.table3[i].contest %></td>
+            <td><%= data.table3[i].institute %></td>
+          </tr>
+        <% } %>
+    </table>
+    </div>
+  </div>
 </div>
 
 
@@ -75,7 +126,7 @@ body {font-size:16px;}
 
 <div class="w3-row-padding" style="margin-bottom:100px">
   <div class="w3-half">
-    <h2>Student with GPA < 2.20</h2>
+    <h2>Student with GPA < 2.50</h2>
     <div>
       <canvas id="pieChart1"></canvas>
     </div>
@@ -103,7 +154,79 @@ function filterTable(){
 
   createTable();
 }
+function createGradeChart(){
 
+  var ctx = document.getElementById("gradeChart").getContext('2d');
+  var gradeChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ["1.00-2.00", "2.01-3.00", "3.01-4.00"],
+      datasets: [{
+        label: '1st Year',
+        data: [0, <%= data.table4[0].num %>, 0],
+        backgroundColor: "rgba(153,255,51,0.6)"
+      }, {
+        label: '2nd Year',
+        data: [0, <%= data.table4[1].num %>, <%= data.table4[3].num %>],
+        backgroundColor: "rgba(255,179,71,0.6)"
+      },{
+        label: '3rd Year',
+        data: [0, 0, <%= data.table4[4].num %>],
+        backgroundColor: "rgba(255,209,220,0.6)"
+      },{
+        label: '4th Year',
+        data: [0, <%= data.table4[2].num %>, <%= data.table4[5].num %>],
+        backgroundColor: "rgba(100,20,100,0.6)"
+      },{
+        label: 'other',
+        data: [0, 0, 0],
+        backgroundColor: "rgba(174,198,207,0.6)"
+      }]
+    }
+  });
+
+  var ctx1 = document.getElementById("pieChart1").getContext('2d');
+  var pieChart1 = new Chart(ctx1, {
+    type: 'doughnut',
+    data: {
+      labels: ["1st", "2nd", "3rd", "4th", "other"],
+      datasets: [{
+        backgroundColor: [
+          "#2ecc71",
+          "#3498db",
+          "#95a5a6",
+          "#9b59b6",
+          "#f1c40f",
+          "#e74c3c",
+          "#34495e"
+        ],
+        data: [<%= data.table5[0].num %>, <%= data.table5[1].num %>, 0, 0, 0]
+      }]
+    }
+  });
+
+  var ctx2 = document.getElementById("pieChart2").getContext('2d');
+  var pieChart2 = new Chart(ctx2, {
+    type: 'pie',
+    data: {
+      labels: ["1st Year", "2nd Year", "3rd Year", "4th Year", "other"],
+      datasets: [{
+        backgroundColor: [
+          "#2ecc71",
+          "#3498db",
+          "#95a5a6",
+          "#9b59b6",
+          "#f1c40f",
+          "#e74c3c",
+          "#34495e"
+        ],
+        data: [0, <%= data.table5[2].num %>, <%= data.table5[3].num %>, <%= data.table5[4].num %>, 0]
+      }]
+    }
+  });
+
+
+}
 
 function createTable() {
   var table = document.getElementById('student_table')

@@ -5,23 +5,23 @@ var gradeChart = new Chart(ctx, {
     labels: ["1.00-2.00", "2.01-3.00", "3.01-4.00"],
     datasets: [{
       label: '1st Year',
-      data: [17, 22, 11],
+      data: [0, <%= data.table4[0].num %>, 0],
       backgroundColor: "rgba(153,255,51,0.6)"
     }, {
       label: '2nd Year',
-      data: [7, 20, 22],
+      data: [0, <%= data.table4[1].num %>, <%= data.table4[3].num %>],
       backgroundColor: "rgba(255,179,71,0.6)"
     },{
       label: '3rd Year',
-      data: [12, 19, 14],
+      data: [0, 0, <%= data.table4[4].num %>],
       backgroundColor: "rgba(255,209,220,0.6)"
     },{
       label: '4th Year',
-      data: [5, 20, 16],
+      data: [0, <%= data.table4[2].num %>, <%= data.table4[5].num %>],
       backgroundColor: "rgba(100,20,100,0.6)"
     },{
       label: 'other',
-      data: [4, 14, 3],
+      data: [0, 0, 0],
       backgroundColor: "rgba(174,198,207,0.6)"
     }]
   }

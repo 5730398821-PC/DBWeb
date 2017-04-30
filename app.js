@@ -8,10 +8,11 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var executive = require('./routes/executive');
-var about = require('./routes/about');
+var query = require('./routes/query');
 var login = require('./routes/login');
 var profile = require('./routes/profile');
 var advisor = require('./routes/advisor')
+var student = require('./routes/student')
 
 var app = express();
 
@@ -55,17 +56,45 @@ app.use(flash());
 
 app.use('/', index);
 app.use('/executive', executive);
-app.use('/about', about);
+app.use('/query', query);
 app.use('/profile', profile);
 app.use('/login', login);
 app.use('/advisor', advisor);
+// app.use('/advisor/student', student)
 
 
-app.post('/login',
-  auth.authenticate('login', { successRedirect: '/profile',
-                                   failureRedirect: '/login',
-                                   failureFlash: true})
-);
+//login form
+// var db = require('./db.js');
+
+// app.post('/login',
+//   // auth.authenticate('login', { successRedirect: '/profile',
+//   //                                  failureRedirect: '/login',
+//   //                                  failureFlash: true})
+//   function(req,res, next){
+//     var username;
+//     var password;
+//     db.query(
+//       //'SELECT ' + req.body.username + ' * FROM Company.employee',
+//       'SELECT I.fname, I.lname '+
+//       'FROM CUReg.login C join instructor I on I.id = C.tid ' +
+//       'where C.username = "' + req.body.username + '" && C.password = "' + req.body.password + '" ',
+//       function(err, rows, fields) {
+//         if (err) {
+//           return next(err);
+//         }else{
+//           authen = (rows.length > 0)
+//           console.log(rows);
+//         }
+//         if(authen){
+//           req.session.profile_name = rows[0].fname + '  ' + rows[0].lname;
+//           res.redirect('/profile')
+//         }else{
+//           res.render('login', {wrong: true});
+//         }
+//       }
+//     );
+//   }
+// );
 
 
 

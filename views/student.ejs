@@ -11,7 +11,7 @@ body {font-size:16px;}
 .w3-half img:hover{opacity:1}
 </style>
 
-<body onload="create_gradeTable()">
+<body >
 
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-pink w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
@@ -26,7 +26,7 @@ body {font-size:16px;}
     <a href="/profile" class="w3-bar-item w3-button w3-hover-white">Profile</a>
     <a href="/executive" class="w3-bar-item w3-button w3-hover-white">Executive</a>
     <a href="/advisor" class="w3-bar-item w3-button w3-hover-white">Advisor</a>
-    <a href="/about" class="w3-bar-item w3-button w3-hover-white">About us</a>
+    <a href="#" class="w3-bar-item w3-button w3-hover-white">About us</a>
   </div>
 </nav>
 
@@ -44,8 +44,8 @@ body {font-size:16px;}
 
   <!-- Header -->
   <div class="w3-container" style="margin-top:80px;" id="showcase">
-    <h1 class="w3-jumbo"><b>5730398821</b> <img src="/images/studentpic5.png" class="w3-left w3-margin-bottom w3-round-xxlarge" style="margin-right:100px;width:250px;height:210px;border:1px solid;" > </img> </h1>
-    <h1 class="w3-xxxlarge w3-text-pink"><b>นาย พิชญุตม์ จิตรศิลป์ฉายากุล</b></h1>
+    <h1 class="w3-jumbo"><b><%= data.table1[0].id %></b> <img src="/images/studentpic5.png" class="w3-left w3-margin-bottom w3-round-xxlarge" style="margin-right:100px;width:250px;height:210px;border:1px solid;" > </img> </h1>
+    <h1 class="w3-xxxlarge w3-text-pink"><b><%= data.table1[0].fname + ' ' + data.table1[0].lname%></b></h1>
     <hr style="margin-top:50px;width:1000px;border:5px solid pink;border-spacing:2px" class="w3-round">
 
   </div>
@@ -54,50 +54,117 @@ body {font-size:16px;}
 <div class="w3-container">
     <h1>Profile</h1>
     <hr>
-    <h4><p>รหัสประจำตัว: 5730398821</p>
-        <p>ชื่อ: นายพิชญุตม์  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp นามสกุล: จิตรศิลป์ฉายากุล &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp เบอร์โทร: 081-xxxxxxxx </p>
-        <p>อีเมล์: pppp@hotmail.com &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp โรคประจำตัว: - </p>
-        <p>คณะ: วิศวกรรมศาสตร์ &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp สาขา: วิศวกรรมคอมพิวเตอร์ &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ชั้นปี: 3 </p>
-        <p>หลักสูตร: ทวิภาค &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp เกรดเฉลี่ย: 3.xx </p>
-        <p>ที่อยู่: หอยู </p>
-    </h4>
+    <div class="w3-row-padding">
+      <div class="w3-third">
+        <h4><p>รหัสประจำตัว: <%= data.table1[0].id%></p>
+            <p>ชื่อ: <%= data.table1[0].fname%> </p>
+            <p>เพศ: <%= data.table1[0].sex%> </p>
+            <p>คณะ: <%= data.table1[0].Department_faculty_name%></p>
+            <p>หลักสูตร: <%= data.table1[0].curriculum %> </p>
+        </h4>
+      </div>
+
+      <div class="w3-third">
+        <h4><p> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp </p>
+            <p>นามสกุล: <%= data.table1[0].lname%> </p>
+            <p>อีเมล์: <%= data.table1[0].email%> </p>
+            <p>สาขา: <%= data.table1[0].Department_department_name %>  </p>
+            <p>เกรดเฉลี่ย: <%= data.table1[0].gpax %></p>
+        </h4>
+      </div>
+
+      <div class="w3-third">
+        <h4><p> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</p>
+            <p>เบอร์โทร: <%= data.table1[0].tel_no%> </p>
+            <p>ชั้นปี: <%= data.table1[0].year %></p>
+            <p>วันเกิด: <%= data.table1[0].birthdate %></p>
+            <p> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</p>
+        </h4>
+      </div>
+      <h4><p style="margin-left:9px">ที่อยู่: <%= data.table1[0].address %> </p></h4>
+    </div>
+
     <hr style="margin-top:50px;width:1000px;border:5px solid pink;border-spacing:2px" class="w3-round">
 </div>
 
     <div class="w3-container">
       <h1>Grade & Activity</h1>
       <hr>
-      <p>YEAR
-        <select id="grade_yearSelect" class="w3-select" style="width:10%;font-size:12px;margin-bottom:15px;margin-left:10px">
-          <option value="1">1st</option>
-          <option value="2">2nd</option>
-          <option value="3" selected="selected">3rd</option>
-          <option value="4">4th</option>
-          <option value="5">5th</option>
-        </select>
-        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp SEMESTER
-        <select id="grade_semesterSelect" class="w3-select" style="width:10%;font-size:12px;margin-bottom:15px;margin-left:10px">
-          <option value="1">First</option>
-          <option value="2" selected="selected">Second</option>
-          <option value="3">Summer</option>
-        </select>
-      </p>
     </div>
   <!-- Photo grid (modal) -->
   <div class="w3-row-padding">
     <div class="w3-half">
+      <p><h1 style="margin-left:39%">Grade</h1></p>
+      <p><h5 style="margin-left:18px;font-size:16px">YEAR/SEMESTER
+        <select id="grade_termSelect" class="w3-select" style="width:20%;font-size:12px;margin-bottom:15px;margin-left:10px">
+          <option value="2014/1">2014/1</option>
+          <option value="2014/2">2014/2</option>
+          <option value="2015/1" selected="selected">2015/1</option>
+          <option value="2015/2">2015/2</option>
+          <option value="2016/1">2016/1</option>
+          <option value="2016/2">2016/2</option>
+          <option value="2017/1">2017/1</option>
+          <option value="2017/2">2017/2</option>
+        </select>
+        <button type="button" class="mybutton-mini" style="margin-left:150px" onclick="getData()">Change</button>
+        <!--&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp SEMESTER -->
+        <!--select id="grade_semesterSelect" class="w3-select" style="width:10%;font-size:12px;margin-bottom:15px;margin-left:10px">
+          <option value="1">First</option>
+          <option value="2" selected="selected">Second</option>
+          <option value="3">Summer</option>
+        </select-->
+       </h5>
+      </p>
       <!-- Student Table -->
 
       <div class="w3-container">
-        <table class="w3-table-all" style="width:100%;margin-bottom:80px;" id="gradeTable">
-          <caption style="font-size:35px;margin-bottom:10px"><b>Grade</b></caption>
+        <table class="w3-table-all" style="width:100%;margin-bottom:80px;" id="gradeTable" >
           <tr>
-          <th>CourseID</th>
-          <th>Name</th>
-          <!--<th>Section</th>-->
-          <th>Grade</th>
-          <th>Weight</th>
+            <th>CourseID</th>
+            <th>Name</th>
+            <th>Grade</th>
+            <th>Credits</th>
+          </tr>
+          <% var weightSum = 0 %>
+          <% var gradeSum = 0 %>
+          <% for(var i=0; i < data.table4.length; i++) { %>
+              <tr class="mytr">
+                  <td><%= data.table4[i].cid %></td>
+                  <td><%= data.table4[i].course_name %></td>
+                  <td><%= data.table4[i].grade %></td>
+                  <td><%= data.table4[i].credit %></td>
+              </tr>
+            <% weightSum += data.table4[i].credit %>
+            <% gradeSum += data.table4[i].grade*data.table4[i].credit%>
+          <% } %>
+          <tfoot>
+            <tr>
+              <td colspan="3">GPA</td>
+              <td><%= (gradeSum/weightSum).toFixed(2) %></td>
+            </tr>
+            <tr>
+              <td colspan="3">Credits</td>
+              <td><%= weightSum %></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="w3-container">
+        <table class="w3-table-all" style="width:100%;margin-bottom:80px" id="awardTable">
+          <caption style="font-size:35px;margin-bottom:10px">Awards</caption>
+          <tr>
+          <th>Award</th>
+          <th>Organization</th>
+          <th>Date</th>
         </tr>
+        <% for(var i=0; i < data.table2.length; i++) { %>
+            <tr class="mytr">
+              <td><%= data.table2[i].award_name %></td>
+              <td><%= data.table2[i].contest %></td>
+              <td><%= data.table2[i].institute %></td>
+            </tr>
+        <% } %>
       </table>
       </div>
     </div>
@@ -105,15 +172,33 @@ body {font-size:16px;}
     <div class="w3-half">
       <!-- Student Table -->
       <div class="w3-container">
-        <table class="w3-table-all" style="width:100%;margin-bottom:80px" id="activityTable">
-          <caption style="font-size:35px;margin-bottom:10px"><b>Activities</b></caption>
+        <table class="w3-table-all" style="width:100%;margin-bottom:80px;" id="withdrawTable">
+          <caption style="font-size:35px;margin-bottom:10px">Withdrawn Courses</caption>
           <tr>
-          <th>CourseID</th>
-          <th>Name</th>
-          <th>Section</th>
-          <th>Date</th>
-          <th>Room</th>
-        </tr>
+            <th>CourseID</th>
+            <th>Name</th>
+            <th>Year</th>
+            <th>Semester</th>
+          </tr>
+
+      </table>
+      </div>
+
+      <div class="w3-container">
+        <table class="w3-table-all" style="width:100%;margin-bottom:80px;" id="absentTable">
+          <caption style="font-size:35px;margin-bottom:10px">Absent</caption>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Reason</th>
+          </tr>
+          <% for(var i=0; i < data.table3.length; i++) { %>
+              <tr class="mytr">
+                <td><%= data.table3[i].absent_date %></td>
+                <td><%= data.table3[i].absent_type %></td>
+                <td><%= data.table3[i].reason %></td>
+              </tr>
+          <% } %>
       </table>
       </div>
     </div>
@@ -123,13 +208,35 @@ body {font-size:16px;}
 <script src="/javascripts/chartjs.js"></script>
 <script src="/javascripts/jquery.js"></script>
 <script>
+function getData() {
+    // Grab the template
+    var term = document.getElementById('grade_termSelect').value
+					$.ajax({
+						type: 'POST',
+            data: { term: term,
+                    sid: <%= data.table1[0].id %>
+                  },
+            url: '/query',
+            success: function(data) {
+                      filterTable(data)
+                    }
+          });
+}
 
-function create_gradeTable() {
+function filterTable(data){
+  var table = document.getElementById('gradeTable')
+  while(table.rows[1]) table.deleteRow(1);
+  create_gradeTable(data)
+}
+
+
+function create_gradeTable(data) {
   var table = document.getElementById('gradeTable')
   var weightSum = 0;
+  var gradeSum = 0;
 
 
-  for (var i = 0; i < 5; i++) {
+  for (var i = 0; i < data.length; i++) {
     var tr = document.createElement('tr');
     var cid = document.createElement('td');
     var name = document.createElement('td');
@@ -137,11 +244,11 @@ function create_gradeTable() {
     var grade = document.createElement('td');
     var weight = document.createElement('td');
 
-    var text_cid = document.createTextNode('2110422');
-    var text_name = document.createTextNode('DB MGT SYS DESIGN');
+    var text_cid = document.createTextNode(data[i].cid);
+    var text_name = document.createTextNode(data[i].course_name);
     //var text_section = document.createTextNode('3');
-    var text_grade = document.createTextNode('A');
-    var text_weight = document.createTextNode('3');
+    var text_grade = document.createTextNode(data[i].grade);
+    var text_weight = document.createTextNode(data[i].credit);
 
         cid.appendChild(text_cid);
         name.appendChild(text_name);
@@ -156,7 +263,8 @@ function create_gradeTable() {
         tr.appendChild(weight);
         table.appendChild(tr);
 
-        weightSum += 3;
+        weightSum += data[i].credit;
+        gradeSum += data[i].grade*data[i].credit;
 
     }
 
@@ -168,8 +276,8 @@ function create_gradeTable() {
     var total1 = document.createElement('td')
     var sum1 = document.createElement('td');
 
-    var text_total1 = document.createTextNode('GPAX');
-    var text_sum1 = document.createTextNode('4.00');
+    var text_total1 = document.createTextNode('GPA');
+    var text_sum1 = document.createTextNode((gradeSum/weightSum).toFixed(2));
 
     total1.colSpan = "3";
     total1.appendChild(text_total1)
@@ -184,7 +292,7 @@ function create_gradeTable() {
     var total = document.createElement('td')
     var sum = document.createElement('td');
 
-    var text_total = document.createTextNode('TotalWeight');
+    var text_total = document.createTextNode('Credits');
     var text_sum = document.createTextNode(weightSum);
 
     total.colSpan = "3";
@@ -200,6 +308,7 @@ function create_gradeTable() {
 }
 
 </script>
+
 
 </body>
 </html>

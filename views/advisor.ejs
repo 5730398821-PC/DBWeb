@@ -12,7 +12,7 @@ body {font-size:16px;}
 .w3-half img:hover{opacity:1}
 </style>
 
-<body onload="createTable()">
+<body>
 
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-pink w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
@@ -27,7 +27,7 @@ body {font-size:16px;}
     <a href="/profile" class="w3-bar-item w3-button w3-hover-white">Profile</a>
     <a href="/executive" class="w3-bar-item w3-button w3-hover-white">Executive</a>
     <a href="/advisor" class="w3-bar-item w3-button w3-hover-white">Advisor</a>
-    <a href="/about" class="w3-bar-item w3-button w3-hover-white">About us</a>
+    <a href="#" class="w3-bar-item w3-button w3-hover-white">About us</a>
   </div>
 </nav>
 
@@ -53,35 +53,58 @@ body {font-size:16px;}
 
   <div class="w3-container">
     <h1 style="margin-top:20px;margin-bottom:35px">My Students</h1>
-    <p style="font-size:18px;margin-bottom:30px">Year
-      <select id="yearSelect" class="w3-select" style="width:10%;font-size:12px;margin-bottom:15px;margin-left:10px">
-        <option value="0">All</option>
-        <option value="1">1st</option>
-        <option value="2">2nd</option>
-        <option value="3">3rd</option>
-        <option value="4">4th</option>
-        <option value="5">Other</option>
-      </select>
-    <button type="button" class="mybutton w3-right" style="margin-left:200px" onclick="filterTable()">Filter</button>
+    <form action="/profile" method="post">
+      <p style="font-size:18px;margin-bottom:30px">Year
+        <select id="yearSelect" class="w3-select" style="width:10%;font-size:12px;margin-bottom:15px;margin-left:10px;">
+          <option value="0">All</option>
+          <option value="1">1st</option>
+          <option value="2">2nd</option>
+          <option value="3">3rd</option>
+          <option value="4">4th</option>
+          <option value="5">Other</option>
+        </select>
+        &nbsp Status
+        <select id="status" class="w3-select" style="width:10%;font-size:12px;margin-bottom:15px;margin-left:10px;">
+          <option value="ปกติ">ปกติ</option>
+          <option value="แลกเปลี่ยนต่างประเทศ">ไปแลกเปลี่ยนต่างประเทศ</option>
+        </select>
+        <button type="button" class="mybutton w3-right" style="margin-left:200px" onclick="getData()">Filter</button>
+      </form>
   </p>
   </div>
 
   <!-- Student Table -->
-  <div class="w3-container" style="height:450px;overflow:auto;margin-bottom:100px">
-    <table class="w3-table-all" style="width:100%" id="student_table">
+  <div class="w3-container" style="overflow:auto;margin-bottom:100px">
+    <table class="w3-table-all" style="width:100%;height:100%" id="student_table">
       <tr>
-      <th>StudentID</th>
-      <th>Name</th>
-      <th>Year</th>
-      <th>GPA</th>
-      <th>Cumulative Weight</th>
-    </tr>
+        <th>StudentID</th>
+        <th>Name</th>
+        <th>Year</th>
+        <th>GPA</th>
+        <th>CM Weight</th>
+        <th></th>
+      </tr>
+    <% for(var i=0; i < data.length; i++) { %>
+        <tr class="mytr" onclick="createStudentChart('<%= data[i].fname %>' + ' ' + '<%= data[i].lname %>')" id="row<%=i%>">
+          <form style="display:none" action="/advisor/student" method="post">
+              <td><%= data[i].id %></td>
+              <td><%= data[i].fname + ' ' + data[i].lname %></td>
+              <td><%= data[i].year %></td>
+              <td><%= data[i].gpax %></td>
+              <td><%= data[i].cmw %></td>
+              <td><input style="display:none" type="text" name="sid" value="<%=data[i].id%>"> <button href='/advisor/student'>info</td>
+            </tr>
+          </form>
+    <% } %>
   </table>
 </div>
 
+<div class="container" id="studentChartZone">
+
+</div>
 
 <div class="container" style="margin-bottom:100px">
-  <h2>GPA of &nbsp นายพิชญุตม์ จิตรศิลป์ฉายากุล</h2>
+  <!--h2>GPA of &nbsp นายพิชญุตม์ จิตรศิลป์ฉายากุล</h2-->
   <div>
     <canvas id="overallChart"></canvas>
   </div>
@@ -92,54 +115,102 @@ body {font-size:16px;}
 <script src="/javascripts/chartjs.js"></script>
 <script src="/javascripts/advisorChart.js"></script>
 <script src="/javascripts/jquery.js"></script>
+
 <script>
-
-function filterTable(){
-  var table = document.getElementById('student_table')
-  var yearSelect = document.getElementById('yearSelect')
-  while(table.rows[1]) table.deleteRow(1);
-
-  createTable();
+function getData() {
+    // Grab the template
+    var year = document.getElementById('yearSelect').value
+    var status = document.getElementById('status').value
+    alert(status)
+          $.ajax({
+            type: 'POST',
+            data: {
+                    year: year,
+                    status: status
+                  },
+            url: '/advisor/query',
+            success: function(data) {
+                      console.log(data);
+                      console.log(data.length);
+                      let test = '<tr>'+
+                        '<th>StudentID</th>' +
+                        '<th>Name</th>' +
+                        '<th>Year</th>' +
+                        '<th>GPA</th>' +
+                        '<th>CM Weight</th>' +
+                        '<th></th>' +
+                      '</tr>'
+                     for(var i=0; i < data.length; i++) {
+                        test += '<tr class="mytr" onclick="createStudentChart(\'' + data[i].fname + ' ' + data[i].lname + '\')" >'+
+                          '<form style="display:none" action="/advisor/student" method="post">' +
+                            '<td>'+ data[i].id +'</td>'+
+                            '<td>'+ data[i].fname + ' ' + data[i].lname +'</td>'+
+                            '<td>'+ data[i].year +'</td>'+
+                            '<td>'+ data[i].gpax +'</td>'+
+                            '<td>'+ data[i].cmw +'</td>'+
+                              '<td><input style="display:none" type="text" name="sid" value="'+ data[i].id +'"><button href="/advisor/student">info</td>' +
+                            '</tr>' +
+                          '</form>'
+                    }
+                    console.log(test);
+                      $('#student_table').html(test)
+                    }
+          });
 }
 
-function createTable() {
-  var table = document.getElementById('student_table')
-
-    for (var i = 0; i < 10; i++){
-      var tr = document.createElement('tr');
-      tr.setAttribute("style", "cursor:pointer");
-        tr.onclick = function(){
-          window.location.href = '/advisor/student'
-        }
+</script>
 
 
-      var id = document.createElement('td');
-      var name = document.createElement('td');
-      var year = document.createElement('td');
-      var gpa = document.createElement('td');
-      var cmweight = document.createElement('td');
+<script>
+function createStudentChart(name){
 
-      var text_id = document.createTextNode('5730398821');
-      var text_name = document.createTextNode('นายพิชญุตม์ จิตรศิลป์ฉายากุล');
-      var text_year = document.createTextNode(yearSelect.options[yearSelect.selectedIndex].value);
-      var text_gpa = document.createTextNode('3.23');
-      var text_cmweight = document.createTextNode('140');
+  var div = document.getElementById('studentChartZone')
+  var h2 = document.createElement('h2')
+  while (div.hasChildNodes()) {
+    div.removeChild(div.firstChild);
+  }
 
-      id.appendChild(text_id);
-      name.appendChild(text_name);
-      year.appendChild(text_year);
-      gpa.appendChild(text_gpa);
-      cmweight.appendChild(text_cmweight);
-      tr.appendChild(id);
-      tr.appendChild(name);
-      tr.appendChild(year);
-      tr.appendChild(gpa);
-      tr.appendChild(cmweight);
+  //div.appendChild(h2)
+  h2.append('GPA of ' + name )
+  div.append(h2);
 
-      table.appendChild(tr);
-    }
+  var ctx = document.getElementById("overallChart").getContext('2d');
+  var data = {
+      //labels: ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year', '6th Year', '7th Year', '8th Year'],
+      labels: ['Year 1/First', 'Year 1/Second', 'Year 2/First', 'Year 2/Second', 'Year 3/First', 'Year 3/Second', 'Year 4/First', 'Year 4/Second'],
+      datasets: [
+          {
+              label: 'GPA',
+              fill: false,
+              lineTension: 0.1,
+              backgroundColor: "rgba(75,192,192,0.4)",
+              borderColor: "rgba(75,192,192,1)",
+              borderCapStyle: 'butt',
+              borderDash: [],
+              borderDashOffset: 0.0,
+              borderJoinStyle: 'miter',
+              pointBorderColor: "rgba(75,192,192,1)",
+              pointBackgroundColor: "#fff",
+              pointBorderWidth: 1,
+              pointHoverRadius: 5,
+              pointHoverBackgroundColor: "rgba(75,192,192,1)",
+              pointHoverBorderColor: "rgba(220,220,220,1)",
+              pointHoverBorderWidth: 2,
+              pointRadius: 1,
+              pointHitRadius: 10,
+              data: [3.02, 2.75, 3.32, 3.75, 3.02, 3.21],
+              spanGaps: false,
+          }
+      ]
+  };
+
+  var overallChart = new Chart(ctx, {
+      type: 'line',
+      data: data,
+  });
 
 }
+
 </script>
 
 </body>
