@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 
   db.query(
     //'SELECT ' + req.body.username + ' * FROM Company.employee',
-    'select id,fname,lname,gpax,year,cmw from((select S.id, S.fname, S.lname, S.gpax, S.status, (2017 - S.enrolled_year) as year from student S join (select A.Student_id from advices A where A.Instructor_id = "' + globals.user.tid + '") A on A.Student_id = S.id) Y left join (select A.Student_id, sum(A.credit) as cmw from (select E.Course_id, E.Student_id, C.credit from evaluation E join course C on E.Course_id = C.id) A group by (A.Student_id)) X on Y.id = X.Student_id ) where status = "ปกติ"',
+    'select id,fname,lname,gpax,year,cmw from((select S.id, S.fname, S.lname, S.gpax, S.status, (2017 - S.enrolled_year) as year from student S join (select A.Student_id from advices A where A.Instructor_id = "' + globals.user.tid + '") A on A.Student_id = S.id) Y left join (select A.Student_id, sum(A.credit) as cmw from (select E.Course_id, E.Student_id, C.credit from evaluation E join course C on E.Course_id = C.id) A group by (A.Student_id)) X on Y.id = X.Student_id )',
     //'select id,fname,lname,gpax,year,cmw from((select S.id, S.fname, S.lname, S.gpax, (2017 - S.enrolled_year) as year from student S join (select A.Student_id from advices A where A.Instructor_id = "' + globals.user.tid + '") A on A.Student_id = S.id) Y left join (select A.Student_id, sum(A.credit) as cmw from (select E.Course_id, E.Student_id, C.credit from evaluation E join course C on E.Course_id = C.id) A group by (A.Student_id)) X on Y.id = X.Student_id)',
     function(err, rows, fields) {
       if (err) {
@@ -85,10 +85,40 @@ router.post('/query', function(req, res, next) {
   var year = req.body.year;
   var status = req.body.status;
   if(year == '0'){
-    var query = 'select id,fname,lname,gpax,year,cmw from((select S.id, S.fname, S.lname, S.gpax, S.status, (2017 - S.enrolled_year) as year from student S join (select A.Student_id from advices A where A.Instructor_id = "' + globals.user.tid + '") A on A.Student_id = S.id) Y left join (select A.Student_id, sum(A.credit) as cmw from (select E.Course_id, E.Student_id, C.credit from evaluation E join course C on E.Course_id = C.id) A group by (A.Student_id)) X on Y.id = X.Student_id ) where status = "' + status + '"'
+    if (status == "all"){
+      var query = 'select id,fname,lname,gpax,year,cmw from((select S.id, S.fname, S.lname, S.gpax, S.status, (2017 - S.enrolled_year) as year from student S join (select A.Student_id from advices A where A.Instructor_id = "' + globals.user.tid + '") A on A.Student_id = S.id) Y left join (select A.Student_id, sum(A.credit) as cmw from (select E.Course_id, E.Student_id, C.credit from evaluation E join course C on E.Course_id = C.id) A group by (A.Student_id)) X on Y.id = X.Student_id )'
+    }else{
+      var query = 'select id,fname,lname,gpax,year,cmw from((select S.id, S.fname, S.lname, S.gpax, S.status, (2017 - S.enrolled_year) as year from student S join (select A.Student_id from advices A where A.Instructor_id = "' + globals.user.tid + '") A on A.Student_id = S.id) Y left join (select A.Student_id, sum(A.credit) as cmw from (select E.Course_id, E.Student_id, C.credit from evaluation E join course C on E.Course_id = C.id) A group by (A.Student_id)) X on Y.id = X.Student_id ) where status = "' + status + '"'
+    }
   }else{
-    var query = 'select id,fname,lname,gpax,year,cmw from((select S.id, S.fname, S.lname, S.gpax, S.status, (2017 - S.enrolled_year) as year from student S join (select A.Student_id from advices A where A.Instructor_id = "' + globals.user.tid + '") A on A.Student_id = S.id) Y left join (select A.Student_id, sum(A.credit) as cmw from (select E.Course_id, E.Student_id, C.credit from evaluation E join course C on E.Course_id = C.id) A group by (A.Student_id)) X on Y.id = X.Student_id ) where status = "' + status + '" && year = "' + year + '"'
+    if (status == "all"){
+      var query = 'select id,fname,lname,gpax,year,cmw from((select S.id, S.fname, S.lname, S.gpax, S.status, (2017 - S.enrolled_year) as year from student S join (select A.Student_id from advices A where A.Instructor_id = "' + globals.user.tid + '") A on A.Student_id = S.id) Y left join (select A.Student_id, sum(A.credit) as cmw from (select E.Course_id, E.Student_id, C.credit from evaluation E join course C on E.Course_id = C.id) A group by (A.Student_id)) X on Y.id = X.Student_id ) where year = "' + year + '"'
+    }else{
+      var query = 'select id,fname,lname,gpax,year,cmw from((select S.id, S.fname, S.lname, S.gpax, S.status, (2017 - S.enrolled_year) as year from student S join (select A.Student_id from advices A where A.Instructor_id = "' + globals.user.tid + '") A on A.Student_id = S.id) Y left join (select A.Student_id, sum(A.credit) as cmw from (select E.Course_id, E.Student_id, C.credit from evaluation E join course C on E.Course_id = C.id) A group by (A.Student_id)) X on Y.id = X.Student_id ) where status = "' + status + '" && year = "' + year + '"'
+    }
+
   }
+  db.query(query, function(err, rows, fields) {
+                    if (err) {
+                      return;
+                    }else{
+                      console.log(rows);
+                      res.send(rows)
+                  }
+                }
+            );
+
+});
+
+router.post('/query2', function(req, res, next) {
+
+  var sid = req.body.sid;
+  var query =  `select E.Student_id, concat(E.academic_year, '/' , E.semester ) as Term , avg(E.grade) as gpax
+                from evaluation E
+                where Student_id = ${sid}
+                group by E.Student_id, E.semester, E.academic_year
+                order by concat(E.academic_year, '/' , E.semester );`
+
   db.query(query, function(err, rows, fields) {
                     if (err) {
                       return;

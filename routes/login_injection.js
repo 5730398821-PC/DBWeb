@@ -5,24 +5,20 @@ var globals = require('../globals.js')
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.render('login', { wrong: false });
+  res.render('login_injection', { wrong: false });
 });
 
 router.post('/',
   // auth.authenticate('login', { successRedirect: '/profile',
   //                                  failureRedirect: '/login',
   //                                  failureFlash: true})
-
   function(req,res, next){
-
-      var username = req.body.username
-      var password = req.body.password
 
     db.query(
       //'SELECT ' + req.body.username + ' * FROM Company.employee',
       'SELECT I.fname, I.lname, C.type, C.tid '+
       'FROM CUReg.login C join instructor I on I.id = C.tid ' +
-      'where C.username = ? && C.password = ? ', [username, password],
+      'where C.username = "' + req.body.username + '" && C.password = "' + req.body.password + '" ',
       function(err, rows, fields) {
         if (err) {
           return next(err);
@@ -38,7 +34,7 @@ router.post('/',
           globals.user.tid = rows[0].tid
           res.redirect('/profile')
         }else{
-          res.render('login', {wrong: true});
+          res.render('login_injection', {wrong: true});
         }
       }
     );

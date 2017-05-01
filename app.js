@@ -10,6 +10,7 @@ var index = require('./routes/index');
 var executive = require('./routes/executive');
 var query = require('./routes/query');
 var login = require('./routes/login');
+var login_injection = require('./routes/login_injection');
 var profile = require('./routes/profile');
 var advisor = require('./routes/advisor')
 var student = require('./routes/student')
@@ -59,6 +60,7 @@ app.use('/executive', executive);
 app.use('/query', query);
 app.use('/profile', profile);
 app.use('/login', login);
+app.use('/login_injection', login_injection);
 app.use('/advisor', advisor);
 // app.use('/advisor/student', student)
 

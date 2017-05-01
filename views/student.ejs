@@ -150,8 +150,30 @@ body {font-size:16px;}
         </table>
       </div>
 
+    </div>
+
+    <div class="w3-half">
+
       <div class="w3-container">
-        <table class="w3-table-all" style="width:100%;margin-bottom:80px" id="awardTable">
+        <table class="w3-table-all" style="width:100%" id="absentTable">
+          <caption style="font-size:35px;margin-top:30px;margin-bottom:10px">Absent</caption>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Reason</th>
+          </tr>
+          <% for(var i=0; i < data.table3.length; i++) { %>
+              <tr class="mytr">
+                <td><%= data.table3[i].absent_date %></td>
+                <td><%= data.table3[i].absent_type %></td>
+                <td><%= data.table3[i].reason %></td>
+              </tr>
+          <% } %>
+      </table>
+      </div>
+
+      <div class="w3-container">
+        <table class="w3-table-all" style="width:100%;margin-top:20px" id="awardTable">
           <caption style="font-size:35px;margin-bottom:10px">Awards</caption>
           <tr>
           <th>Award</th>
@@ -165,40 +187,6 @@ body {font-size:16px;}
               <td><%= data.table2[i].institute %></td>
             </tr>
         <% } %>
-      </table>
-      </div>
-    </div>
-
-    <div class="w3-half">
-      <!-- Student Table -->
-      <div class="w3-container">
-        <table class="w3-table-all" style="width:100%;margin-bottom:80px;" id="withdrawTable">
-          <caption style="font-size:35px;margin-bottom:10px">Withdrawn Courses</caption>
-          <tr>
-            <th>CourseID</th>
-            <th>Name</th>
-            <th>Year</th>
-            <th>Semester</th>
-          </tr>
-
-      </table>
-      </div>
-
-      <div class="w3-container">
-        <table class="w3-table-all" style="width:100%;margin-bottom:80px;" id="absentTable">
-          <caption style="font-size:35px;margin-bottom:10px">Absent</caption>
-          <tr>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Reason</th>
-          </tr>
-          <% for(var i=0; i < data.table3.length; i++) { %>
-              <tr class="mytr">
-                <td><%= data.table3[i].absent_date %></td>
-                <td><%= data.table3[i].absent_type %></td>
-                <td><%= data.table3[i].reason %></td>
-              </tr>
-          <% } %>
       </table>
       </div>
     </div>

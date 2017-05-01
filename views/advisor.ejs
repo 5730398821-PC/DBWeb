@@ -65,6 +65,7 @@ body {font-size:16px;}
         </select>
         &nbsp Status
         <select id="status" class="w3-select" style="width:10%;font-size:12px;margin-bottom:15px;margin-left:10px;">
+          <option value="all">ทุกประเภท</option>
           <option value="ปกติ">ปกติ</option>
           <option value="แลกเปลี่ยนต่างประเทศ">ไปแลกเปลี่ยนต่างประเทศ</option>
         </select>
@@ -85,7 +86,7 @@ body {font-size:16px;}
         <th></th>
       </tr>
     <% for(var i=0; i < data.length; i++) { %>
-        <tr class="mytr" onclick="createStudentChart('<%= data[i].fname %>' + ' ' + '<%= data[i].lname %>')" id="row<%=i%>">
+        <tr class="mytr" onclick="createStudentChart('<%= data[i].fname %>' + ' ' + '<%= data[i].lname %>', '<%= data[i].id %>')" id="row<%=i%>">
           <form style="display:none" action="/advisor/student" method="post">
               <td><%= data[i].id %></td>
               <td><%= data[i].fname + ' ' + data[i].lname %></td>
@@ -141,7 +142,7 @@ function getData() {
                         '<th></th>' +
                       '</tr>'
                      for(var i=0; i < data.length; i++) {
-                        test += '<tr class="mytr" onclick="createStudentChart(\'' + data[i].fname + ' ' + data[i].lname + '\')" >'+
+                        test += '<tr class="mytr" onclick="createStudentChart(\'' + data[i].fname + ' ' + data[i].lname + '\', \'' + data[i].id + '\')" >'+
                           '<form style="display:none" action="/advisor/student" method="post">' +
                             '<td>'+ data[i].id +'</td>'+
                             '<td>'+ data[i].fname + ' ' + data[i].lname +'</td>'+
@@ -162,7 +163,7 @@ function getData() {
 
 
 <script>
-function createStudentChart(name){
+function createStudentChart(name, sid){
 
   var div = document.getElementById('studentChartZone')
   var h2 = document.createElement('h2')
@@ -170,44 +171,75 @@ function createStudentChart(name){
     div.removeChild(div.firstChild);
   }
 
+  $.ajax({
+    type: 'POST',
+    data: {
+            sid: sid
+          },
+    url: '/advisor/query2',
+    success: function(data) {
+              console.log(data);
+              console.log(data.length);
+
+              var label = []
+              var gpa = []
+              for(i = 0; i < data.length; i++){
+                label.push(data[i].Term)
+                gpa.push(data[i].gpax)
+              }
+
+              var ctx = document.getElementById("overallChart").getContext('2d');
+              var data = {
+                  //labels: ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year', '6th Year', '7th Year', '8th Year'],
+                  labels: label,
+                  datasets: [
+                      {
+                          label: 'GPA',
+                          fill: false,
+                          lineTension: 0.1,
+                          backgroundColor: "rgba(75,192,192,0.4)",
+                          borderColor: "rgba(75,192,192,1)",
+                          borderCapStyle: 'butt',
+                          borderDash: [],
+                          borderDashOffset: 0.0,
+                          borderJoinStyle: 'miter',
+                          pointBorderColor: "rgba(75,192,192,1)",
+                          pointBackgroundColor: "#fff",
+                          pointBorderWidth: 1,
+                          pointHoverRadius: 5,
+                          pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                          pointHoverBorderColor: "rgba(220,220,220,1)",
+                          pointHoverBorderWidth: 2,
+                          pointRadius: 1,
+                          pointHitRadius: 10,
+                          data: gpa,
+                          spanGaps: false,
+                      }
+                  ]
+              };
+
+              var overallChart = new Chart(ctx, {
+                  type: 'line',
+                  data: data,
+                  options: {
+                              scales: {
+                                  yAxes: [{
+                                      ticks: {
+                                          max: 4.00,
+                                          min: 1.00,
+                                          stepSize: 0.5
+                                      }
+                                  }]
+                              }
+                            }
+              });
+
+            }
+  });
   //div.appendChild(h2)
   h2.append('GPA of ' + name )
   div.append(h2);
 
-  var ctx = document.getElementById("overallChart").getContext('2d');
-  var data = {
-      //labels: ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year', '6th Year', '7th Year', '8th Year'],
-      labels: ['Year 1/First', 'Year 1/Second', 'Year 2/First', 'Year 2/Second', 'Year 3/First', 'Year 3/Second', 'Year 4/First', 'Year 4/Second'],
-      datasets: [
-          {
-              label: 'GPA',
-              fill: false,
-              lineTension: 0.1,
-              backgroundColor: "rgba(75,192,192,0.4)",
-              borderColor: "rgba(75,192,192,1)",
-              borderCapStyle: 'butt',
-              borderDash: [],
-              borderDashOffset: 0.0,
-              borderJoinStyle: 'miter',
-              pointBorderColor: "rgba(75,192,192,1)",
-              pointBackgroundColor: "#fff",
-              pointBorderWidth: 1,
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: "rgba(75,192,192,1)",
-              pointHoverBorderColor: "rgba(220,220,220,1)",
-              pointHoverBorderWidth: 2,
-              pointRadius: 1,
-              pointHitRadius: 10,
-              data: [3.02, 2.75, 3.32, 3.75, 3.02, 3.21],
-              spanGaps: false,
-          }
-      ]
-  };
-
-  var overallChart = new Chart(ctx, {
-      type: 'line',
-      data: data,
-  });
 
 }
 
