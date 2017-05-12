@@ -6,6 +6,15 @@ Prerequisites
 
 -	Node.js with Express.js : https://nodejs.org/en/
 -	Clone Project จาก Github : https://github.com/5730398821-PC/DBWeb
+- ไปยังโฟลเดอร์ที่ Clone Project ลงมา เปิดไฟล์ db.js แล้วทำการแก้ไขส่วนที่เป็น 'user' และ 'password' ดังนี้
+
+var pool = mysql.createPool({
+  connectionLimit : 100,
+  host     : 'localhost',
+  user     : '[your-username]',
+  password : '[your-password]',
+  database : 'CUReg'
+});
 
 
 Installation
